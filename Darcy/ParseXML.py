@@ -1,62 +1,46 @@
-import xml.etree.ElementTree as etree
 import os
-import xlsxwriter
+import xml.etree.ElementTree as etree
 
-# workbook = xlsxwriter.Workbook('StaticDependencies.xlsx')
-# worksheet = workbook.add_worksheet()
-# row = 0
-txt_file= open("pkg_graph.txt","w")
-txt_classes_file= open("class_pkg_graph.txt","w")
-txt_provides_uses_file= open("interface_abstract_classes.txt","w")
+f_pkg_graph = open("pkg_graph.txt", "w")
+f_class_pkg_graph = open("class_pkg_graph.txt", "w")
+f_interface_abstract_classes = open("interface_abstract_classes.txt", "w")
 
-pckgNum = 0
-pkgList = [] 
+pkgList = set()
 
 for root, dirs, files in os.walk("XMLreports/"):
     for file in files:
         if file.endswith(".xml"):
             e = etree.parse(os.path.join(root, file)).getroot()
-            # row = row+1
-            for pkgs in e.findall('packages'):
-                for pkg in pkgs.findall('package'):
-                    # worksheet.write(row, 0, 'Package Name')
-                    # print("pkg--",pkg.get('name')," ::: usesExternal: ", pkg.get('usesExternal'))
-                    # worksheet.write(row,1, pkg.get('name'))
-                    # row=row+1
-                    # worksheet.write(row, 0, 'Package Uses External')
-                    pckgNum = pckgNum +1
-                    for ref in pkg.findall('packageRef'):
-                        # worksheet.write(row,1, ref.get('name'))
-                        txt_file.write(pkg.get('name')+":"+ref.get('name')+"\n")
-                        pkgList.append(pkg.get('name'))
-                        # row = row + 1
+            for pkgs in e.findall("packages"):
+                for pkg in pkgs.findall("package"):
+                    for ref in pkg.findall("packageRef"):
+                        f_pkg_graph.write(
+                            pkg.get("name") + ":" + ref.get("name") + "\n"
+                        )
+                pkgList.add(pkg.get("name"))
 
-            for classes in e.findall('classes'):
-                for cl in classes.findall('class'):
-                    # print("class--",cl.get('name')," ::: usesExternal: ", cl.get('usesExternal'))
-                    #checking for provides and uses:
-                    if(cl.get('type')=="interface" or cl.get('type')== "abstract class"):
-                        txt_provides_uses_file.write(cl.get('name')+":"+cl.get('type')+"\n")
-                        for ref in cl.findall('classRef'):
-                            if(ref.get('type') == "usedBy"):
-                                txt_provides_uses_file.write(cl.get('name')+"-Used By-"+ref.get('name'+"\n"))
+            for classes in e.findall("classes"):
+                for cl in classes.findall("class"):
+                    if cl.get("type") in ["interface", "abstract class"]:
+                        f_interface_abstract_classes.write(
+                            cl.get("name") + ":" + cl.get("type") + "\n"
+                        )
+                        for ref in cl.findall("classRef"):
+                            if ref.get("type") == "usedBy":
+                                f_interface_abstract_classes.write(
+                                    cl.get("name")
+                                    + "-Used By-"
+                                    + ref.get("name" + "\n")
+                                )
                     for pkg in pkgList:
-                        if(cl.get('name').startswith(pkg)):
-                            txt_classes_file.write(pkg+":"+cl.get('name')+"\n")
+                        if cl.get("name").startswith(pkg):
+                            f_class_pkg_graph.write(pkg + ":" + cl.get("name") + "\n")
+                            break
 
+f_pkg_graph.close()
+f_class_pkg_graph.close()
+f_interface_abstract_classes.close()
 
-                    # worksheet.write(row,0, "Class Name")
-                    # worksheet.write(row,1, cl.get('name'))
-                    # row=row+1
-                    # worksheet.write(row,0, "Class Uses External")
-                    # for ref in cl.findall('classRef'):
-                    #     worksheet.write(row,1, ref.get('name'))
-                    #     row = row + 1
-
-txt_file.close()
-txt_classes_file.close()
-txt_provides_uses_file.close()
-
-print(":::: Number of Packages = ",pckgNum, " ::::")
-
-# workbook.close()
+print(":::: Number of Packages = ", len(pkgList), " ::::")
+# print(":::: Length of `pkgList`` = ",len(pkgList), " ::::")
+# print(":::: Number of Unique Packages = ",len(set(pkgList)), " ::::")
