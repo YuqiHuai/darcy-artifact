@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.tree.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import javafx.util.Pair;
+import main.antlr4.Pair;
 
 public class Java9Visitor extends Java9BaseListener
 {
@@ -30,7 +30,7 @@ public class Java9Visitor extends Java9BaseListener
                 if(transitive){
                     System.out.print(node.getSymbol().getText().replace("transitive","") + " ");
                     transformedModuleInfo += node.getSymbol().getText().replace("transitive","") + " ";
-                }else {
+                } else {
                     System.out.print(node.getSymbol().getText() + " ");
                     transformedModuleInfo += node.getSymbol().getText() + " ";
                 }
@@ -148,6 +148,6 @@ public class Java9Visitor extends Java9BaseListener
     }
 
     public String getTransformedModuleInfo() {
-        return transformedModuleInfo;
+        return transformedModuleInfo.replace(" . ", ".");
     }
 }

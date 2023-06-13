@@ -1,5 +1,6 @@
 package main.antlr4;
-import javafx.util.Pair;
+//import javafx.util.Pair;
+import main.antlr4.Pair;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.*;
