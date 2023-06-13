@@ -1,6 +1,16 @@
 Darcy/XMLreports/*
 Darcy/Check_Consistency/.idea/*
 Darcy/Check_Consistency/out/*
+Darcy/class_pkg_graph.txt
+Darcy/excessDirectives.txt
+Darcy/interface_abstract_classes.txt
+Darcy/memory-usage.txt
+Darcy/module-infos.txt
+Darcy/modules.txt
+Darcy/package_to_module.txt
+Darcy/paths_for_open_analysis.txt
+Darcy/paths_for_prov_use_analysis.txt
+Darcy/pkg_graph.txt
 
 # Created by https://www.toptal.com/developers/gitignore/api/intellij,visualstudiocode,macos,linux,windows,python,java
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij,visualstudiocode,macos,linux,windows,python,java
